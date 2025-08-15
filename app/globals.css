@@ -1,26 +1,37 @@
 @import "tailwindcss";
+/* Google Fonts import removed in favor of next/font */
+
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-almarai);
+  --text-screen:1.11vw;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #00040D;
     --foreground: #ededed;
   }
 }
+.scroll-snap-center {
+  scroll-snap-align: center;
+}
+/* globals.css */
+.no-scrollbar {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* IE 10+ */
+}
+.no-scrollbar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
