@@ -10,7 +10,7 @@
 
 ```bash
 # Clone the repository
-git clone <YOUR_REPO_URL>
+git clone git@github.com:tonyfayez111/tadarab.git
 
 # Navigate into the project folder
 cd <YOUR_PROJECT_FOLDER>
