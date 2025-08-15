@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 /* ---------------- Types ---------------- */
@@ -66,8 +66,7 @@ const mockItems: Item[] = [
   {
     id: "q3",
     type: "quote",
-    quote:
-      "المحتوى واضح، والأمثلة حقيقية وسهلة التطبيق. أنصح بها لكل مبتدئ.",
+    quote: "المحتوى واضح، والأمثلة حقيقية وسهلة التطبيق. أنصح بها لكل مبتدئ.",
     authorName: "محمد",
     line1: "مدخل إلى إدارة الأعمال",
     line2: "خطوات عملية",
@@ -92,7 +91,11 @@ function useVideoPoster(url?: string) {
     v.crossOrigin = "anonymous";
     v.preload = "auto";
     v.src = url;
-    const onLoaded = () => { try { v.currentTime = 0.1; } catch {} };
+    const onLoaded = () => {
+      try {
+        v.currentTime = 0.1;
+      } catch {}
+    };
     const onSeeked = () => {
       const c = document.createElement("canvas");
       c.width = v.videoWidth || 640;
@@ -100,15 +103,20 @@ function useVideoPoster(url?: string) {
       const ctx = c.getContext("2d");
       if (!ctx) return;
       ctx.drawImage(v, 0, 0, c.width, c.height);
-      try { setPoster(c.toDataURL("image/jpeg", 0.8)); } catch {}
-      v.pause(); v.removeAttribute("src"); v.load();
+      try {
+        setPoster(c.toDataURL("image/jpeg", 0.8));
+      } catch {}
+      v.pause();
+      v.removeAttribute("src");
+      v.load();
     };
     v.addEventListener("loadeddata", onLoaded);
     v.addEventListener("seeked", onSeeked);
     return () => {
       v.removeEventListener("loadeddata", onLoaded);
       v.removeEventListener("seeked", onSeeked);
-      v.removeAttribute("src"); v.load();
+      v.removeAttribute("src");
+      v.load();
     };
   }, [url]);
   return poster;
@@ -117,22 +125,76 @@ function useVideoPoster(url?: string) {
 /* ---------------- Component ---------------- */
 export default function FeaturedShowcaseHorizontal({
   items = mockItems,
-}: { items?: Item[] }) {
+}: {
+  items?: Item[];
+}) {
   const [playingId, setPlayingId] = useState<string | number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -400, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
+    }
+  };
 
   return (
     <section dir="rtl" className="w-full">
-      <div className="mx-auto max-w-6xl">
-        {/* Horizontal scroller:
-            - Mobile: snap center, one card centered at a time
-            - Desktop: still scrollable; multiple cards visible
-        */}
-        <div className="overflow-x-auto no-scrollbar">
+      <div className="mx-auto max-w-6xl relative">
+        {/* Desktop Arrow Navigation */}
+        <div className="hidden md:block">
+          <button
+            onClick={scrollLeft}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 transition-all duration-200"
+            aria-label="Scroll left"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="rotate-180"
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <button
+            onClick={scrollRight}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 transition-all duration-200"
+            aria-label="Scroll right"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Horizontal scroller */}
+        <div className="overflow-x-auto no-scrollbar" ref={scrollRef}>
           <div
             className="
               flex gap-4
-              snap-x snap-mandatory md:snap-none
-              px-[calc((100vw-352px)/2)] md:px-0
+              snap-x snap-mandatory
+              px-[calc((100vw-352px)/2)] md:px-8
+              pb-4 md:pb-6
             "
           >
             {items.map((item) =>
@@ -170,10 +232,14 @@ function baseCardClasses(extra = "") {
 function QuoteCard({ item }: { item: QuoteItem }) {
   return (
     <article
-      className={baseCardClasses("bg-black text-white p-6 flex flex-col justify-between")}
+      className={baseCardClasses(
+        "bg-black text-white p-6 flex flex-col justify-between"
+      )}
       aria-label={`شهادة: ${item.authorName}`}
     >
-      <span className="absolute top-4 left-6 text-white/30 text-3xl select-none">”</span>
+      <span className="absolute top-4 left-6 text-white/30 text-3xl select-none">
+        ”
+      </span>
 
       <p className="mt-6 text-[15px] leading-7 text-white/85 line-clamp-[9]">
         {`"${item.quote}"`}
@@ -181,9 +247,15 @@ function QuoteCard({ item }: { item: QuoteItem }) {
 
       <div className="mt-6">
         <div className="text-lg font-extrabold">{item.authorName}</div>
-        {item.line1 && <div className="text-sm text-white/70">{item.line1}</div>}
-        {item.line2 && <div className="text-sm text-white/70">{item.line2}</div>}
-        {item.line3 && <div className="text-sm text-white/70">{item.line3}</div>}
+        {item.line1 && (
+          <div className="text-sm text-white/70">{item.line1}</div>
+        )}
+        {item.line2 && (
+          <div className="text-sm text-white/70">{item.line2}</div>
+        )}
+        {item.line3 && (
+          <div className="text-sm text-white/70">{item.line3}</div>
+        )}
       </div>
     </article>
   );
@@ -198,7 +270,9 @@ function VideoCard({
   isPlaying: boolean;
   onPlay: () => void;
 }) {
-  const posterFromVideo = useVideoPoster(item.thumbnail ? undefined : item.videoUrl);
+  const posterFromVideo = useVideoPoster(
+    item.thumbnail ? undefined : item.videoUrl
+  );
   const poster = item.thumbnail || posterFromVideo || "/images/fallback.jpg";
 
   return (
@@ -227,7 +301,9 @@ function VideoCard({
 
           {/* bottom text */}
           <div className="absolute inset-x-0 bottom-0 p-5">
-            <div className="text-white text-base font-extrabold">{item.title}</div>
+            <div className="text-white text-base font-extrabold">
+              {item.title}
+            </div>
             <div className="text-white/80 text-sm">{item.instructor}</div>
           </div>
 

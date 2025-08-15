@@ -39,9 +39,9 @@ export default function HorizontalCards({
   // Scroll by ~90% of the visible width (feels like paging)
   const scrollAmount = useMemo(() => {
     if (!scrollRef.current) return 280;
-    
+
     const width = scrollRef.current.clientWidth;
-    
+
     // Mobile: scroll by 1-2 cards, Desktop: scroll by 2-3 cards
     if (width < 768) {
       // Mobile: scroll by ~80% of visible width (1-2 cards)
@@ -53,7 +53,7 @@ export default function HorizontalCards({
       // Desktop: scroll by ~60% of visible width (2-3 cards)
       return Math.floor(width * 0.6);
     }
-  }, [scrollRef.current?.clientWidth]);
+  }, []); // Removed scrollRef.current?.clientWidth dependency
 
   const doScroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
@@ -71,27 +71,32 @@ export default function HorizontalCards({
 
   return (
     <div className={`w-full ${className}`} dir={dir}>
-        <div className="flex  gap-1 ">
+      <div className="flex  gap-1 ">
         {title && <h2 className="font-[800] text-[32px] mb-3">{title}</h2>}
-     
-        {secondtitle && <h2 className="font-[800] text-[32px] text-[#BE1622]">{secondtitle}</h2>}
-        </div>
-   
+
+        {secondtitle && (
+          <h2 className="font-[800] text-[32px] text-[#BE1622]">
+            {secondtitle}
+          </h2>
+        )}
+      </div>
 
       <div className="relative w-full">
-     
         <button
           type="button"
           onClick={() => doScroll(dir === "rtl" ? "left" : "right")}
           aria-label="Scroll left"
           className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
         >
-   
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"
-               xmlns="http://www.w3.org/2000/svg">      
+          <svg
+            width="60"
+            height="60"
+            viewBox="0 0 60 60"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <foreignObject x="-16" y="-16" width="92" height="92">
               <div
-                xmlns="http://www.w3.org/1999/xhtml"
                 style={{
                   backdropFilter: "blur(8px)",
                   WebkitBackdropFilter: "blur(8px)",
@@ -102,12 +107,26 @@ export default function HorizontalCards({
               />
             </foreignObject>
             <g data-figma-bg-blur-radius="16">
-              <rect width="60" height="60" rx="30" fill="white" fillOpacity="0.1" />
-              <path d="M34 38L26 30L34 22" stroke="white" strokeWidth="3"
-                    strokeLinecap="round" strokeLinejoin="round" />
+              <rect
+                width="60"
+                height="60"
+                rx="30"
+                fill="white"
+                fillOpacity="0.1"
+              />
+              <path
+                d="M34 38L26 30L34 22"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </g>
             <defs>
-              <clipPath id="bgblur_0_6371_4320_clip_path" transform="translate(16 16)">
+              <clipPath
+                id="bgblur_0_6371_4320_clip_path"
+                transform="translate(16 16)"
+              >
                 <rect width="60" height="60" rx="30" />
               </clipPath>
             </defs>
@@ -121,11 +140,16 @@ export default function HorizontalCards({
           aria-label="Scroll right"
           className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
         >
-          <svg className="rotate-180" width="60" height="60" viewBox="0 0 60 60" fill="none"
-               xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="rotate-180"
+            width="60"
+            height="60"
+            viewBox="0 0 60 60"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <foreignObject x="-16" y="-16" width="92" height="92">
               <div
-                xmlns="http://www.w3.org/1999/xhtml"
                 style={{
                   backdropFilter: "blur(8px)",
                   WebkitBackdropFilter: "blur(8px)",
@@ -136,12 +160,26 @@ export default function HorizontalCards({
               />
             </foreignObject>
             <g data-figma-bg-blur-radius="16">
-              <rect width="60" height="60" rx="30" fill="white" fillOpacity="0.1" />
-              <path d="M34 38L26 30L34 22" stroke="white" strokeWidth="3"
-                    strokeLinecap="round" strokeLinejoin="round" />
+              <rect
+                width="60"
+                height="60"
+                rx="30"
+                fill="white"
+                fillOpacity="0.1"
+              />
+              <path
+                d="M34 38L26 30L34 22"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </g>
             <defs>
-              <clipPath id="bgblur_0_6371_4320_clip_path" transform="translate(16 16)">
+              <clipPath
+                id="bgblur_0_6371_4320_clip_path"
+                transform="translate(16 16)"
+              >
                 <rect width="60" height="60" rx="30" />
               </clipPath>
             </defs>
@@ -156,12 +194,12 @@ export default function HorizontalCards({
         <div
           ref={scrollRef}
           className="no-scrollbar overflow-x-auto overflow-y-hidden"
-          style={{ scrollSnapType: 'x mandatory' }}
+          style={{ scrollSnapType: "x mandatory" }}
         >
           <div className="inline-flex gap-4 align-top whitespace-nowrap px-4 md:px-0">
             {/* Add left padding on mobile to center first card */}
             <div className="flex-shrink-0 w-0 md:w-0 md:ml-0 ml-[calc(50vw-130px)]"></div>
-            
+
             {data.map((item) => (
               <div key={item.id} className="flex-shrink-0 scroll-snap-center">
                 {renderCard(item)}
