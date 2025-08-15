@@ -1,3 +1,41 @@
+# 🚀 Run This Project Locally
+
+## Prerequisites
+- **Node.js** 18.17+ (or 20+ LTS recommended)
+- One of: **npm**, **yarn**, **pnpm**, or **bun**
+
+---
+
+## 1) Clone & Install
+
+```bash
+# Clone the repository
+git clone <YOUR_REPO_URL>
+
+# Navigate into the project folder
+cd <YOUR_PROJECT_FOLDER>
+
+# Install dependencies (pick ONE package manager)
+npm install       # or
+yarn              # or
+pnpm install      # or
+bun install
+
+
+--------------------------------------------------------------
+# Start in development mode
+npm run dev       # or
+yarn dev          # or
+pnpm dev          # or
+bun dev
+
+# The app will now be running at:
+# http://localhost:3000
+-------------------------------------------------------------
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -32,5 +70,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+
+
+
+
+
+
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
