@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import leftHero from "@/public/images/leftHero.png";
-import rightHero from "@/public/images/rightHero.png";
-import Dropdown from "../components/ui/Dropdown";
+import leftHero from "@/public/images/lefthero.png";
+import rightHero from "@/public/images/righthero.png";
+
 
 export default function Hero() {
   return (
